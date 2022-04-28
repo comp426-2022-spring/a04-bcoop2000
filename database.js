@@ -4,7 +4,7 @@ const logdb = new database("log.db")
 
 // now to initialize database
 
-const stmt = logdb.prepare(`SELECT name FROM sqlite_master WHERE type='table' and 'access';`);
+const stmt = logdb.prepare(`SELECT name FROM sqlite_master WHERE type='table' and name='accesslog';`);
 let row = stmt.get();
 
 // Check if row exists and make database if not
@@ -33,4 +33,4 @@ if (row === undefined) {
     console.log('Database already exists.')
 }
 // Export as module to use in server
-module.exports = log.db
+module.exports = logdb;
