@@ -49,6 +49,12 @@ if (args.help || args.h) {
     process.exit(0)
 }
 
+// start stream
+if (args.log === 'true') {
+  const accessLog = fs.createWriteStream('access.log', { flags: 'a'})
+  app.use(morgan('combined', {stream: accessLog}))
+}
+
 // Middleware
 app.use((req, res, next) => {
   let logdata = {
