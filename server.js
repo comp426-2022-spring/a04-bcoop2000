@@ -22,6 +22,9 @@ const fs = require('fs')
 // require database
 const db = require("./database.js")
 
+// use express' own built in body parser
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 
 // Store help text
 const help = (`
@@ -46,8 +49,36 @@ if (args.help || args.h) {
     process.exit(0)
 }
 
+// Middleware
+app.use((req, res, next) => {
+  let logdata = {
+    remoteaddr: req.ip,
+    remoteuser: req.user,
+    time: Date.now(),
+    method: req.method,
+    url: req.url,
+    protocol: req.protocol,
+    httpversion: req.httpVersion,
+    status: res.statusCode,
+    referer: req.headers['referer'],
+    useragent: req.headers['user-agent']
+}
+  next()
+})
+// Middleware
 
-
+// add the debug endpoints
+if(args.debug == true){
+  console.log(args['debug'])
+  app.get('/app/log/access', (req, res) =>{
+    console.log("all records in access log")
+    const stmt = db.prepare('get * accesslog').all()
+    res.status(200).json(stmt)
+  })
+  app.get('/app/error', (req,res) =>{
+    throw new Error('Error test successful.')
+  })
+}
 
 // bring all the functions from coin assignment
 function coinFlip() {

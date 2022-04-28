@@ -10,7 +10,7 @@ let row = stmt.get();
 // Check if row exists and make database if not
 if (row === undefined) {
 // Keep console dictating what gets done
-    console.log("Initializing database.");
+    console.log("Initializing database...");
 // Set a const that will contain your SQL commands to initialize the database.
     const sqlInit = `
         CREATE TABLE accesslog ( 
